@@ -3,7 +3,11 @@
   "name": "@dcgw/excalibur-extended-label",
   "version": "0.0.0-development",
   "description": "Excalibur's Label class, but with extra features",
-  "keywords": ["excalibur", "label", "typescript"],
+  "keywords": [
+    "excalibur",
+    "label",
+    "typescript"
+  ],
   "author": "Daniel Cassidy <mail@danielcassidy.me.uk>",
   "homepage": "https://github.com/dcgw/excalibur-extended-label",
   "bugs": "https://github.com/dcgw/excalibur-extended-label/issues",
@@ -27,10 +31,14 @@
     "ava": "3.13.0",
     "cz-conventional-changelog": "3.3.0",
     "eslint": "7.12.0",
+    "excalibur": "0.24.5",
     "prettier": "2.1.2",
     "semantic-release": "17.2.1",
     "ts-node": "9.0.0",
     "typescript": "4.0.3"
+  },
+  "peerDependencies": {
+    "excalibur": "^0.24.0"
   },
   "eslintConfig": {
     "root": true,
