@@ -1,33 +1,81 @@
-import {
-    Actor,
-    BaseAlign,
-    Body,
-    CollisionType,
-    Color,
-    FontStyle,
-    FontUnit,
-    TextAlign,
-    Vector
-} from "excalibur";
+import {Actor, BaseAlign, Body, Color, FontStyle, FontUnit, TextAlign, Vector} from "excalibur";
 
-export interface LabelOptions extends Partial<Label> {
-    x?: number;
-    y?: number;
-    text?: string;
-    bold?: boolean;
-    pos?: Vector;
-    vel?: Vector;
-    acc?: Vector;
-    rotation?: number;
-    rx?: number;
-    z?: number;
-    color?: Color;
-    visible?: boolean;
-    body?: Body;
-    collisionType?: CollisionType;
-    shadowWidth?: number;
-    shadowColor?: Color;
-    shadowOffset?: Vector;
+export interface LabelOptions {
+    /**  The text to draw. */
+    readonly text?: string;
+
+    /** The CSS font family string (e.g. `sans-serif`, `Droid Sans Pro`). Web
+     * fonts are supported, same as in CSS. */
+    readonly fontFamily?: string;
+
+    /** The font style for the label.
+     *
+     * @default FontStyle.Normal */
+    readonly fontStyle?: FontStyle;
+
+    /** True if the text is bold.
+     *
+     * @default false */
+    readonly bold?: boolean;
+
+    /** The font size in the selected units.
+     *
+     * @default 10 */
+    readonly fontSize?: number;
+
+    /** The font size units.
+     *
+     * @default FontUnit.Px */
+    readonly fontUnit?: FontUnit;
+
+    /** Horizontal text alignment.
+     *
+     * @default TextAlign.Left */
+    readonly textAlign?: TextAlign;
+
+    /** Basline alignment.
+     *
+     * @default BaseAlign.Alphabetic */
+    readonly baseAlign?: BaseAlign;
+
+    /** The position of the text in pixels. */
+    readonly pos?: Vector;
+
+    /** The velocity of the text in pixels per second. */
+    readonly vel?: Vector;
+
+    /** The acceleration of the text in pixels per second per second. */
+    readonly acc?: Vector;
+
+    /** The rotation of the text in radians. */
+    readonly rotation?: number;
+
+    /** The rotational velocity of the text in radians per second. */
+    readonly rx?: number;
+
+    /** The color of the text. */
+    readonly color?: Color;
+
+    /** True if the text is visible, false if it is invisible.
+     *
+     * @default true */
+    readonly visible?: boolean;
+
+    /** The physics body the is associated with this actor. The body is the
+     * container for all physical properties, like position, velocity,
+     * acceleration, mass, inertia, etc. */
+    readonly body?: Body;
+
+    /** Width of the shadow blur in pixels. */
+    readonly shadowWidth?: number;
+
+    /** The color of the shadow. Set to Color.Transparent to hide the shadow. */
+    readonly shadowColor?: Color;
+
+    /** The offset of the shadow from the text, in pixels. */
+    readonly shadowOffset?: Vector;
+
+    readonly maxWidth?: number;
 }
 
 export default class Label extends Actor {
