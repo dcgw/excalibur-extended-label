@@ -74,8 +74,6 @@ export interface LabelOptions {
 
     /** The offset of the shadow from the text, in pixels. */
     readonly shadowOffset?: Vector;
-
-    readonly maxWidth?: number;
 }
 
 export default class Label extends Actor {
@@ -116,9 +114,6 @@ export default class Label extends Actor {
      * @default BaseAlign.Bottom */
     public baseAlign: BaseAlign;
 
-    /** The maximum width in pixels that the label should occupy. */
-    public maxWidth?: number;
-
     /** Width of the shadow blur in pixels. */
     public shadowWidth: number;
 
@@ -138,7 +133,6 @@ export default class Label extends Actor {
         this.fontUnit = options?.fontUnit ?? FontUnit.Px;
         this.textAlign = options?.textAlign ?? TextAlign.Left;
         this.baseAlign = options?.baseAlign ?? BaseAlign.Bottom;
-        this.maxWidth = options?.maxWidth;
         this.shadowWidth = options?.shadowWidth ?? 0;
         this.shadowColor = options?.shadowColor ?? Color.Transparent;
         this.shadowOffset = options?.shadowOffset ?? Vector.Zero;
@@ -160,7 +154,7 @@ export default class Label extends Actor {
         context.shadowColor = this.shadowColor.toString();
         context.shadowOffsetX = this.shadowOffset.x;
         context.shadowOffsetY = this.shadowOffset.y;
-        context.fillText(this.text, 0, 0, this.maxWidth);
+        context.fillText(this.text, 0, 0);
 
         context.restore();
     }
