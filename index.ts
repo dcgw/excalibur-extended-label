@@ -25,6 +25,9 @@ export interface LabelOptions extends Partial<Label> {
     visible?: boolean;
     body?: Body;
     collisionType?: CollisionType;
+    shadowWidth?: number;
+    shadowColor?: Color;
+    shadowOffset?: Vector;
 }
 
 export default class Label extends Actor {
@@ -68,6 +71,15 @@ export default class Label extends Actor {
     /** The maximum width in pixels that the label should occupy. */
     public maxWidth?: number;
 
+    /** Width of the shadow blur in pixels. */
+    public shadowWidth: number;
+
+    /** The color of the shadow. Set to Color.Transparent to hide the shadow. */
+    public shadowColor: Color;
+
+    /** The offset of the shadow from the text, in pixels. */
+    public shadowOffset: Vector;
+
     public constructor(options?: LabelOptions) {
         super(options);
         this.text = options?.text ?? "";
@@ -79,6 +91,9 @@ export default class Label extends Actor {
         this.textAlign = options?.textAlign ?? TextAlign.Left;
         this.baseAlign = options?.baseAlign ?? BaseAlign.Bottom;
         this.maxWidth = options?.maxWidth;
+        this.shadowWidth = options?.shadowWidth ?? 0;
+        this.shadowColor = options?.shadowColor ?? Color.Transparent;
+        this.shadowOffset = options?.shadowOffset ?? Vector.Zero;
     }
 
     public draw(context: CanvasRenderingContext2D, delta: number): void {
@@ -93,6 +108,10 @@ export default class Label extends Actor {
         context.font = `${lookupFontStyle(this.fontStyle)} ${lookupFontWeight(this.bold)} ${
             this.fontSize
         }${lookupFontUnit(this.fontUnit)} ${this.fontFamily}`;
+        context.shadowBlur = this.shadowWidth;
+        context.shadowColor = this.shadowColor.toString();
+        context.shadowOffsetX = this.shadowOffset.x;
+        context.shadowOffsetY = this.shadowOffset.y;
         context.fillText(this.text, 0, 0, this.maxWidth);
 
         context.restore();
