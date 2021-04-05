@@ -187,6 +187,11 @@ export default class Label extends Actor {
         const context2 = canvas2?.getContext("2d") ?? context;
 
         context2.save();
+
+        if (context2 !== context) {
+            context2.setTransform(context.getTransform());
+        }
+
         context2.translate(this.pos.x, this.pos.y);
         context2.scale(this.scale.x, this.scale.y);
         context2.rotate(this.rotation);
@@ -201,10 +206,12 @@ export default class Label extends Actor {
         context2.fillStyle = this.color.toString();
         context2.strokeText(this.text, 0, 0);
         context2.fillText(this.text, 0, 0);
+
         context2.restore();
 
         if (canvas2 != null) {
             context.save();
+            context.resetTransform();
             context.shadowBlur = this.shadowBlurRadius;
             context.shadowColor = this.shadowColor.toString();
             context.shadowOffsetX = this.shadowOffset.x;
