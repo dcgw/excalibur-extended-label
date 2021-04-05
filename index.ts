@@ -1,6 +1,6 @@
 import {Actor, BaseAlign, Body, Color, FontStyle, TextAlign, Vector} from "excalibur";
 import chain from "@softwareventures/chain";
-import {mapFn, foldFn, concat, map, toArray} from "@softwareventures/iterable";
+import {mapFn, foldFn, concat, toArray} from "@softwareventures/iterable";
 
 export interface LabelOptions {
     /**  The text to draw. */
