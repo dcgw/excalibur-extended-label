@@ -1,5 +1,4 @@
 {
-  "private": true,
   "name": "@dcgw/excalibur-extended-label",
   "version": "0.0.0-development",
   "description": "Excalibur's Label class, but with extra features",
@@ -60,5 +59,8 @@
   },
   "release": {
     "extends": "@softwareventures/semantic-release-config"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
