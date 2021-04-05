@@ -1,4 +1,4 @@
-import {Actor, BaseAlign, Body, Color, FontStyle, FontUnit, TextAlign, Vector} from "excalibur";
+import {Actor, BaseAlign, Body, Color, FontStyle, TextAlign, Vector} from "excalibur";
 
 export interface LabelOptions {
     /**  The text to draw. */
@@ -18,15 +18,10 @@ export interface LabelOptions {
      * @default false */
     readonly bold?: boolean;
 
-    /** The font size in the selected units.
+    /** The font size in pixels.
      *
      * @default 10 */
     readonly fontSize?: number;
-
-    /** The font size units.
-     *
-     * @default FontUnit.Px */
-    readonly fontUnit?: FontUnit;
 
     /** Horizontal text alignment.
      *
@@ -132,11 +127,6 @@ export default class Label extends Actor {
      * @default FontStyle.Normal */
     public fontStyle: FontStyle;
 
-    /** The units for the font size.
-     *
-     * @default FontUnit.Px */
-    public fontUnit: FontUnit;
-
     /** Horizontal text alignment.
      *
      * @default TextAlign.Left */
@@ -169,7 +159,6 @@ export default class Label extends Actor {
         this.fontFamily = options?.fontFamily ?? "sans-serif";
         this.fontSize = options?.fontSize ?? 10;
         this.fontStyle = options?.fontStyle ?? FontStyle.Normal;
-        this.fontUnit = options?.fontUnit ?? FontUnit.Px;
         this.textAlign = options?.textAlign ?? TextAlign.Left;
         this.baseAlign = options?.baseAlign ?? BaseAlign.Bottom;
         this.outlineColor = options?.outlineColor ?? Color.Transparent;
@@ -199,7 +188,7 @@ export default class Label extends Actor {
         context2.textBaseline = lookupBaseAlign(this.baseAlign);
         context2.font = `${lookupFontStyle(this.fontStyle)} ${lookupFontWeight(this.bold)} ${
             this.fontSize
-        }${lookupFontUnit(this.fontUnit)} ${this.fontFamily}`;
+        }px ${this.fontFamily}`;
         context2.lineWidth = this.outlineWidth * 2;
         context2.strokeStyle =
             this.outlineWidth === 0 ? "transparent" : this.outlineColor.toString();
@@ -219,21 +208,6 @@ export default class Label extends Actor {
             context.drawImage(canvas2, 0, 0);
             context.restore();
         }
-    }
-}
-
-function lookupFontUnit(fontUnit: FontUnit): string {
-    switch (fontUnit) {
-        case FontUnit.Em:
-            return "em";
-        case FontUnit.Rem:
-            return "rem";
-        case FontUnit.Pt:
-            return "pt";
-        case FontUnit.Px:
-            return "px";
-        case FontUnit.Percent:
-            return "%";
     }
 }
 
