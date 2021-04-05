@@ -1,6 +1,6 @@
 import {Actor, BaseAlign, Body, Color, FontStyle, TextAlign, Vector} from "excalibur";
 import chain from "@softwareventures/chain";
-import {mapFn, foldFn, concat, map} from "@softwareventures/iterable";
+import {mapFn, foldFn, concat, map, toArray} from "@softwareventures/iterable";
 
 export interface LabelOptions {
     /**  The text to draw. */
@@ -227,8 +227,8 @@ export default class Label extends Actor {
         const lines = this.wrapLines(context2);
         const lineHeight = this.lineHeight ?? this.fontSize;
 
-        map(lines, (line, i) => context2.strokeText(line, 0, i * lineHeight));
-        map(lines, (line, i) => context2.fillText(line, 0, i * lineHeight));
+        lines.forEach((line, i) => context2.strokeText(line, 0, i * lineHeight));
+        lines.forEach((line, i) => context2.fillText(line, 0, i * lineHeight));
 
         context2.restore();
 
@@ -244,7 +244,7 @@ export default class Label extends Actor {
         }
     }
 
-    private wrapLines(context: CanvasRenderingContext2D): Iterable<string> {
+    private wrapLines(context: CanvasRenderingContext2D): string[] {
         const lines = this.text.split("\n");
         if (isFinite(this.wrapWidth)) {
             return chain(lines)
@@ -262,7 +262,8 @@ export default class Label extends Actor {
                         )
                     )
                 )
-                .map(concat).value;
+                .map(concat)
+                .map(toArray).value;
         } else {
             return lines;
         }
