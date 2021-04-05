@@ -28,7 +28,7 @@ export interface LabelOptions {
      * @default TextAlign.Left */
     readonly textAlign?: TextAlign;
 
-    /** Basline alignment.
+    /** Baseline alignment.
      *
      * @default BaseAlign.Alphabetic */
     readonly baseAlign?: BaseAlign;
