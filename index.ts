@@ -61,14 +61,17 @@ export interface LabelOptions {
      * @default true */
     readonly visible?: boolean;
 
-    /** Width of the shadow blur in pixels. */
-    readonly shadowWidth?: number;
+    /** The color of the text. */
+    readonly color?: Color;
 
     /** The color of the shadow. Set to Color.Transparent to hide the shadow. */
     readonly shadowColor?: Color;
 
     /** The offset of the shadow from the text, in pixels. */
     readonly shadowOffset?: Vector;
+
+    /** Radius of the shadow blur in pixels. */
+    readonly shadowBlurRadius?: number;
 
     /** The physics body the is associated with this actor. The body is the
      * container for all physical properties, like position, velocity,
@@ -114,14 +117,14 @@ export default class Label extends Actor {
      * @default BaseAlign.Bottom */
     public baseAlign: BaseAlign;
 
-    /** Width of the shadow blur in pixels. */
-    public shadowWidth: number;
-
     /** The color of the shadow. Set to Color.Transparent to hide the shadow. */
     public shadowColor: Color;
 
     /** The offset of the shadow from the text, in pixels. */
     public shadowOffset: Vector;
+
+    /** Radius of the shadow blur in pixels. */
+    public shadowBlurRadius: number;
 
     public constructor(options?: LabelOptions) {
         super(options);
@@ -133,9 +136,9 @@ export default class Label extends Actor {
         this.fontUnit = options?.fontUnit ?? FontUnit.Px;
         this.textAlign = options?.textAlign ?? TextAlign.Left;
         this.baseAlign = options?.baseAlign ?? BaseAlign.Bottom;
-        this.shadowWidth = options?.shadowWidth ?? 0;
         this.shadowColor = options?.shadowColor ?? Color.Transparent;
         this.shadowOffset = options?.shadowOffset ?? Vector.Zero;
+        this.shadowBlurRadius = options?.shadowBlurRadius ?? 0;
     }
 
     public draw(context: CanvasRenderingContext2D, delta: number): void {
@@ -150,7 +153,7 @@ export default class Label extends Actor {
         context.font = `${lookupFontStyle(this.fontStyle)} ${lookupFontWeight(this.bold)} ${
             this.fontSize
         }${lookupFontUnit(this.fontUnit)} ${this.fontFamily}`;
-        context.shadowBlur = this.shadowWidth;
+        context.shadowBlur = this.shadowBlurRadius;
         context.shadowColor = this.shadowColor.toString();
         context.shadowOffsetX = this.shadowOffset.x;
         context.shadowOffsetY = this.shadowOffset.y;
