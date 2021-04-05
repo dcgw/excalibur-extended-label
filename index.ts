@@ -61,11 +61,6 @@ export interface LabelOptions {
      * @default true */
     readonly visible?: boolean;
 
-    /** The physics body the is associated with this actor. The body is the
-     * container for all physical properties, like position, velocity,
-     * acceleration, mass, inertia, etc. */
-    readonly body?: Body;
-
     /** Width of the shadow blur in pixels. */
     readonly shadowWidth?: number;
 
@@ -74,6 +69,11 @@ export interface LabelOptions {
 
     /** The offset of the shadow from the text, in pixels. */
     readonly shadowOffset?: Vector;
+
+    /** The physics body the is associated with this actor. The body is the
+     * container for all physical properties, like position, velocity,
+     * acceleration, mass, inertia, etc. */
+    readonly body?: Body;
 }
 
 export default class Label extends Actor {
