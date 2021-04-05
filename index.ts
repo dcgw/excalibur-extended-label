@@ -1,4 +1,6 @@
-import {Actor, BaseAlign, Body, Color, FontStyle, FontUnit, TextAlign, Vector} from "excalibur";
+import {Actor, BaseAlign, Body, Color, FontStyle, TextAlign, Vector} from "excalibur";
+import chain from "@softwareventures/chain";
+import {mapFn, foldFn, concat, toArray} from "@softwareventures/iterable";
 
 export interface LabelOptions {
     /**  The text to draw. */
@@ -18,25 +20,35 @@ export interface LabelOptions {
      * @default false */
     readonly bold?: boolean;
 
-    /** The font size in the selected units.
+    /** The font size in pixels.
      *
      * @default 10 */
     readonly fontSize?: number;
-
-    /** The font size units.
-     *
-     * @default FontUnit.Px */
-    readonly fontUnit?: FontUnit;
 
     /** Horizontal text alignment.
      *
      * @default TextAlign.Left */
     readonly textAlign?: TextAlign;
 
-    /** Basline alignment.
+    /** Baseline alignment.
      *
      * @default BaseAlign.Alphabetic */
     readonly baseAlign?: BaseAlign;
+
+    /** The height of each line of text in pixels, for multiline text.
+     *
+     * Set to `undefined` to use the font size as the line height.
+     *
+     * @default undefined */
+    readonly lineHeight?: number;
+
+    /** The maximum width of a line of text, in pixels, after which the text
+     * will wrap to the next line.
+     *
+     * Set to `Infinity` to disable text wrapping.
+     *
+     * @default Infinity */
+    readonly wrapWidth?: number;
 
     /** The position of the text in pixels. */
     readonly pos?: Vector;
@@ -53,28 +65,61 @@ export interface LabelOptions {
     /** The rotational velocity of the text in radians per second. */
     readonly rx?: number;
 
-    /** The color of the text. */
-    readonly color?: Color;
-
     /** True if the text is visible, false if it is invisible.
      *
      * @default true */
     readonly visible?: boolean;
 
+    /** The color of the text. */
+    readonly color?: Color;
+
+    /** The color of the text outline. Set to Color.Transparent to hide the outline.
+     *
+     * @default Color.Transparent */
+    readonly outlineColor?: Color;
+
+    /** The width of the text outline, in pixels. Set to 0 to hide the outline.
+     *
+     * @default 0 */
+    readonly outlineWidth?: number;
+
+    /** The color of the shadow. Set to Color.Transparent to hide the shadow.
+     *
+     * @default Color.Transparent */
+    readonly shadowColor?: Color;
+
+    /** The offset of the shadow from the text, in pixels.
+     *
+     * @default Vector.Zero */
+    readonly shadowOffset?: Vector;
+
+    /** Radius of the shadow blur in pixels.
+     *
+     * @default 0 */
+    readonly shadowBlurRadius?: number;
+
     /** The physics body the is associated with this actor. The body is the
      * container for all physical properties, like position, velocity,
      * acceleration, mass, inertia, etc. */
     readonly body?: Body;
-
-    /** Width of the shadow blur in pixels. */
-    readonly shadowWidth?: number;
-
-    /** The color of the shadow. Set to Color.Transparent to hide the shadow. */
-    readonly shadowColor?: Color;
-
-    /** The offset of the shadow from the text, in pixels. */
-    readonly shadowOffset?: Vector;
 }
+
+const offscreenCanvas = (() => {
+    let cache: HTMLCanvasElement | null = null;
+
+    return (onscreenCanvas: HTMLCanvasElement): HTMLCanvasElement | null => {
+        if (cache == null) {
+            cache = onscreenCanvas.ownerDocument?.createElement("canvas") ?? null;
+        }
+
+        if (cache != null) {
+            cache.width = onscreenCanvas.width;
+            cache.height = onscreenCanvas.height;
+        }
+
+        return cache;
+    };
+})();
 
 export default class Label extends Actor {
     /**  The text to draw. */
@@ -99,11 +144,6 @@ export default class Label extends Actor {
      * @default FontStyle.Normal */
     public fontStyle: FontStyle;
 
-    /** The units for the font size.
-     *
-     * @default FontUnit.Px */
-    public fontUnit: FontUnit;
-
     /** Horizontal text alignment.
      *
      * @default TextAlign.Left */
@@ -114,14 +154,31 @@ export default class Label extends Actor {
      * @default BaseAlign.Bottom */
     public baseAlign: BaseAlign;
 
-    /** Width of the shadow blur in pixels. */
-    public shadowWidth: number;
+    /** The height of each line of text in pixels, for multiline text.
+     *
+     * Set to `undefined` to use the font size as the line height. */
+    public lineHeight: number | undefined;
+
+    /** The maximum width of a line of text, in pixels, after which the text
+     * will wrap to the next line.
+     *
+     * Set to `Infinity` to disable text wrapping. */
+    public wrapWidth: number;
+
+    /** The color of the text outline. Set to Color.Transparent to hide the outline. */
+    public outlineColor: Color;
+
+    /** The width of the text outline, in pixels. Set to 0 to hide the outline. */
+    public outlineWidth: number;
 
     /** The color of the shadow. Set to Color.Transparent to hide the shadow. */
     public shadowColor: Color;
 
     /** The offset of the shadow from the text, in pixels. */
     public shadowOffset: Vector;
+
+    /** Radius of the shadow blur in pixels. */
+    public shadowBlurRadius: number;
 
     public constructor(options?: LabelOptions) {
         super(options);
@@ -130,48 +187,87 @@ export default class Label extends Actor {
         this.fontFamily = options?.fontFamily ?? "sans-serif";
         this.fontSize = options?.fontSize ?? 10;
         this.fontStyle = options?.fontStyle ?? FontStyle.Normal;
-        this.fontUnit = options?.fontUnit ?? FontUnit.Px;
         this.textAlign = options?.textAlign ?? TextAlign.Left;
         this.baseAlign = options?.baseAlign ?? BaseAlign.Bottom;
-        this.shadowWidth = options?.shadowWidth ?? 0;
+        this.lineHeight = options?.lineHeight;
+        this.wrapWidth = options?.wrapWidth ?? Infinity;
+        this.outlineColor = options?.outlineColor ?? Color.Transparent;
+        this.outlineWidth = options?.outlineWidth ?? 0;
         this.shadowColor = options?.shadowColor ?? Color.Transparent;
         this.shadowOffset = options?.shadowOffset ?? Vector.Zero;
+        this.shadowBlurRadius = options?.shadowBlurRadius ?? 0;
     }
 
     public draw(context: CanvasRenderingContext2D, delta: number): void {
-        context.save();
-        context.translate(this.pos.x, this.pos.y);
-        context.scale(this.scale.x, this.scale.y);
-        context.rotate(this.rotation);
+        const shadowVisible =
+            this.shadowColor.a !== 0 &&
+            (this.shadowBlurRadius !== 0 || this.shadowOffset.x !== 0 || this.shadowOffset.y !== 0);
+        const canvas2 = shadowVisible ? offscreenCanvas(context.canvas) : null;
+        const context2 = canvas2?.getContext("2d") ?? context;
 
-        context.textAlign = lookupTextAlign(this.textAlign);
-        context.textBaseline = lookupBaseAlign(this.baseAlign);
-        context.fillStyle = this.color.toString();
-        context.font = `${lookupFontStyle(this.fontStyle)} ${lookupFontWeight(this.bold)} ${
+        context2.save();
+
+        if (context2 !== context) {
+            context2.setTransform(context.getTransform());
+        }
+
+        context2.translate(this.pos.x, this.pos.y);
+        context2.scale(this.scale.x, this.scale.y);
+        context2.rotate(this.rotation);
+        context2.textAlign = lookupTextAlign(this.textAlign);
+        context2.textBaseline = lookupBaseAlign(this.baseAlign);
+        context2.font = `${lookupFontStyle(this.fontStyle)} ${lookupFontWeight(this.bold)} ${
             this.fontSize
-        }${lookupFontUnit(this.fontUnit)} ${this.fontFamily}`;
-        context.shadowBlur = this.shadowWidth;
-        context.shadowColor = this.shadowColor.toString();
-        context.shadowOffsetX = this.shadowOffset.x;
-        context.shadowOffsetY = this.shadowOffset.y;
-        context.fillText(this.text, 0, 0);
+        }px ${this.fontFamily}`;
+        context2.lineWidth = this.outlineWidth * 2;
+        context2.strokeStyle =
+            this.outlineWidth === 0 ? "transparent" : this.outlineColor.toString();
+        context2.fillStyle = this.color.toString();
 
-        context.restore();
+        const lines = this.wrapLines(context2);
+        const lineHeight = this.lineHeight ?? this.fontSize;
+
+        lines.forEach((line, i) => context2.strokeText(line, 0, i * lineHeight));
+        lines.forEach((line, i) => context2.fillText(line, 0, i * lineHeight));
+
+        context2.restore();
+
+        if (canvas2 != null) {
+            context.save();
+            context.resetTransform();
+            context.shadowBlur = this.shadowBlurRadius;
+            context.shadowColor = this.shadowColor.toString();
+            context.shadowOffsetX = this.shadowOffset.x;
+            context.shadowOffsetY = this.shadowOffset.y;
+            context.drawImage(canvas2, 0, 0);
+            context.restore();
+        }
     }
-}
 
-function lookupFontUnit(fontUnit: FontUnit): string {
-    switch (fontUnit) {
-        case FontUnit.Em:
-            return "em";
-        case FontUnit.Rem:
-            return "rem";
-        case FontUnit.Pt:
-            return "pt";
-        case FontUnit.Px:
-            return "px";
-        case FontUnit.Percent:
-            return "%";
+    private wrapLines(context: CanvasRenderingContext2D): string[] {
+        const lines = this.text.split("\n");
+        if (isFinite(this.wrapWidth)) {
+            return chain(lines)
+                .map(mapFn(line => line.split(/\s+/)))
+                .map(
+                    mapFn(
+                        foldFn(
+                            ([line, ...lines], word) =>
+                                !line
+                                    ? [word]
+                                    : context.measureText(`${line} ${word}`).width < this.wrapWidth
+                                    ? [`${line} ${word}`, ...lines]
+                                    : [word, line, ...lines],
+                            [] as string[]
+                        )
+                    )
+                )
+                .map(concat)
+                .map(toArray)
+                .value.reverse();
+        } else {
+            return lines;
+        }
     }
 }
 

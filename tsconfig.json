@@ -2,6 +2,6 @@
   "extends": "@softwareventures/tsconfig",
   "exclude": ["**/*.test.ts", "**/test.ts"],
   "compilerOptions": {
-    "lib": ["es5", "dom"]
+    "lib": ["es2017", "dom"]
   }
 }
