@@ -263,7 +263,8 @@ export default class Label extends Actor {
                     )
                 )
                 .map(concat)
-                .map(toArray).value;
+                .map(toArray)
+                .value.reverse();
         } else {
             return lines;
         }
