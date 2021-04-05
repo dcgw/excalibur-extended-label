@@ -53,9 +53,6 @@ export interface LabelOptions {
     /** The rotational velocity of the text in radians per second. */
     readonly rx?: number;
 
-    /** The color of the text. */
-    readonly color?: Color;
-
     /** True if the text is visible, false if it is invisible.
      *
      * @default true */
