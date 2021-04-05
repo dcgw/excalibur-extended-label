@@ -7,7 +7,10 @@
     "label",
     "typescript"
   ],
-  "author": "Daniel Cassidy <mail@danielcassidy.me.uk>",
+  "contributors": [
+    "Daniel Cassidy <mail@danielcassidy.me.uk>",
+    "George Weller <george.weller@gmail.com>"
+  ],
   "homepage": "https://github.com/dcgw/excalibur-extended-label",
   "bugs": "https://github.com/dcgw/excalibur-extended-label/issues",
   "repository": "github:dcgw/excalibur-extended-label",
