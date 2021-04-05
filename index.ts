@@ -61,13 +61,19 @@ export interface LabelOptions {
     /** The color of the text. */
     readonly color?: Color;
 
-    /** The color of the shadow. Set to Color.Transparent to hide the shadow. */
+    /** The color of the shadow. Set to Color.Transparent to hide the shadow.
+     *
+     * @default Color.Transparent */
     readonly shadowColor?: Color;
 
-    /** The offset of the shadow from the text, in pixels. */
+    /** The offset of the shadow from the text, in pixels.
+     *
+     * @default Vector.Zero */
     readonly shadowOffset?: Vector;
 
-    /** Radius of the shadow blur in pixels. */
+    /** Radius of the shadow blur in pixels.
+     *
+     * @default 0 */
     readonly shadowBlurRadius?: number;
 
     /** The physics body the is associated with this actor. The body is the
