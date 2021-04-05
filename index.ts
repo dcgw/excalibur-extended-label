@@ -61,6 +61,16 @@ export interface LabelOptions {
     /** The color of the text. */
     readonly color?: Color;
 
+    /** The color of the text outline. Set to Color.Transparent to hide the outline.
+     *
+     * @default Color.Transparent */
+    readonly outlineColor?: Color;
+
+    /** The width of the text outline, in pixels. Set to 0 to hide the outline.
+     *
+     * @default 0 */
+    readonly outlineWidth?: number;
+
     /** The color of the shadow. Set to Color.Transparent to hide the shadow.
      *
      * @default Color.Transparent */
@@ -81,6 +91,23 @@ export interface LabelOptions {
      * acceleration, mass, inertia, etc. */
     readonly body?: Body;
 }
+
+const offscreenCanvas = (() => {
+    let cache: HTMLCanvasElement | null = null;
+
+    return (onscreenCanvas: HTMLCanvasElement): HTMLCanvasElement | null => {
+        if (cache == null) {
+            cache = onscreenCanvas.ownerDocument?.createElement("canvas") ?? null;
+        }
+
+        if (cache != null) {
+            cache.width = onscreenCanvas.width;
+            cache.height = onscreenCanvas.height;
+        }
+
+        return cache;
+    };
+})();
 
 export default class Label extends Actor {
     /**  The text to draw. */
@@ -120,6 +147,12 @@ export default class Label extends Actor {
      * @default BaseAlign.Bottom */
     public baseAlign: BaseAlign;
 
+    /** The color of the text outline. Set to Color.Transparent to hide the outline. */
+    public outlineColor: Color;
+
+    /** The width of the text outline, in pixels. Set to 0 to hide the outline. */
+    public outlineWidth: number;
+
     /** The color of the shadow. Set to Color.Transparent to hide the shadow. */
     public shadowColor: Color;
 
@@ -139,30 +172,46 @@ export default class Label extends Actor {
         this.fontUnit = options?.fontUnit ?? FontUnit.Px;
         this.textAlign = options?.textAlign ?? TextAlign.Left;
         this.baseAlign = options?.baseAlign ?? BaseAlign.Bottom;
+        this.outlineColor = options?.outlineColor ?? Color.Transparent;
+        this.outlineWidth = options?.outlineWidth ?? 0;
         this.shadowColor = options?.shadowColor ?? Color.Transparent;
         this.shadowOffset = options?.shadowOffset ?? Vector.Zero;
         this.shadowBlurRadius = options?.shadowBlurRadius ?? 0;
     }
 
     public draw(context: CanvasRenderingContext2D, delta: number): void {
-        context.save();
-        context.translate(this.pos.x, this.pos.y);
-        context.scale(this.scale.x, this.scale.y);
-        context.rotate(this.rotation);
+        const shadowVisible =
+            this.shadowColor.a !== 0 &&
+            (this.shadowBlurRadius !== 0 || this.shadowOffset.x !== 0 || this.shadowOffset.y !== 0);
+        const canvas2 = shadowVisible ? offscreenCanvas(context.canvas) : null;
+        const context2 = canvas2?.getContext("2d") ?? context;
 
-        context.textAlign = lookupTextAlign(this.textAlign);
-        context.textBaseline = lookupBaseAlign(this.baseAlign);
-        context.fillStyle = this.color.toString();
-        context.font = `${lookupFontStyle(this.fontStyle)} ${lookupFontWeight(this.bold)} ${
+        context2.save();
+        context2.translate(this.pos.x, this.pos.y);
+        context2.scale(this.scale.x, this.scale.y);
+        context2.rotate(this.rotation);
+        context2.textAlign = lookupTextAlign(this.textAlign);
+        context2.textBaseline = lookupBaseAlign(this.baseAlign);
+        context2.font = `${lookupFontStyle(this.fontStyle)} ${lookupFontWeight(this.bold)} ${
             this.fontSize
         }${lookupFontUnit(this.fontUnit)} ${this.fontFamily}`;
-        context.shadowBlur = this.shadowBlurRadius;
-        context.shadowColor = this.shadowColor.toString();
-        context.shadowOffsetX = this.shadowOffset.x;
-        context.shadowOffsetY = this.shadowOffset.y;
-        context.fillText(this.text, 0, 0);
+        context2.lineWidth = this.outlineWidth * 2;
+        context2.strokeStyle =
+            this.outlineWidth === 0 ? "transparent" : this.outlineColor.toString();
+        context2.fillStyle = this.color.toString();
+        context2.strokeText(this.text, 0, 0);
+        context2.fillText(this.text, 0, 0);
+        context2.restore();
 
-        context.restore();
+        if (canvas2 != null) {
+            context.save();
+            context.shadowBlur = this.shadowBlurRadius;
+            context.shadowColor = this.shadowColor.toString();
+            context.shadowOffsetX = this.shadowOffset.x;
+            context.shadowOffsetY = this.shadowOffset.y;
+            context.drawImage(canvas2, 0, 0);
+            context.restore();
+        }
     }
 }
 
