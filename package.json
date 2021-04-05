@@ -20,6 +20,8 @@
     "test": "ava"
   },
   "dependencies": {
+    "@softwareventures/chain": "^0.1.2",
+    "@softwareventures/iterable": "^1.1.1",
     "tslib": "2.1.0"
   },
   "devDependencies": {

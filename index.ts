@@ -1,4 +1,6 @@
 import {Actor, BaseAlign, Body, Color, FontStyle, TextAlign, Vector} from "excalibur";
+import chain from "@softwareventures/chain";
+import {mapFn, foldFn, concat, map} from "@softwareventures/iterable";
 
 export interface LabelOptions {
     /**  The text to draw. */
@@ -32,6 +34,21 @@ export interface LabelOptions {
      *
      * @default BaseAlign.Alphabetic */
     readonly baseAlign?: BaseAlign;
+
+    /** The height of each line of text in pixels, for multiline text.
+     *
+     * Set to `undefined` to use the font size as the line height.
+     *
+     * @default undefined */
+    readonly lineHeight?: number;
+
+    /** The maximum width of a line of text, in pixels, after which the text
+     * will wrap to the next line.
+     *
+     * Set to `Infinity` to disable text wrapping.
+     *
+     * @default Infinity */
+    readonly wrapWidth?: number;
 
     /** The position of the text in pixels. */
     readonly pos?: Vector;
@@ -137,6 +154,17 @@ export default class Label extends Actor {
      * @default BaseAlign.Bottom */
     public baseAlign: BaseAlign;
 
+    /** The height of each line of text in pixels, for multiline text.
+     *
+     * Set to `undefined` to use the font size as the line height. */
+    public lineHeight: number | undefined;
+
+    /** The maximum width of a line of text, in pixels, after which the text
+     * will wrap to the next line.
+     *
+     * Set to `Infinity` to disable text wrapping. */
+    public wrapWidth: number;
+
     /** The color of the text outline. Set to Color.Transparent to hide the outline. */
     public outlineColor: Color;
 
@@ -161,6 +189,8 @@ export default class Label extends Actor {
         this.fontStyle = options?.fontStyle ?? FontStyle.Normal;
         this.textAlign = options?.textAlign ?? TextAlign.Left;
         this.baseAlign = options?.baseAlign ?? BaseAlign.Bottom;
+        this.lineHeight = options?.lineHeight;
+        this.wrapWidth = options?.wrapWidth ?? Infinity;
         this.outlineColor = options?.outlineColor ?? Color.Transparent;
         this.outlineWidth = options?.outlineWidth ?? 0;
         this.shadowColor = options?.shadowColor ?? Color.Transparent;
@@ -193,8 +223,12 @@ export default class Label extends Actor {
         context2.strokeStyle =
             this.outlineWidth === 0 ? "transparent" : this.outlineColor.toString();
         context2.fillStyle = this.color.toString();
-        context2.strokeText(this.text, 0, 0);
-        context2.fillText(this.text, 0, 0);
+
+        const lines = this.wrapLines(context2);
+        const lineHeight = this.lineHeight ?? this.fontSize;
+
+        map(lines, (line, i) => context2.strokeText(line, 0, i * lineHeight));
+        map(lines, (line, i) => context2.fillText(line, 0, i * lineHeight));
 
         context2.restore();
 
@@ -207,6 +241,30 @@ export default class Label extends Actor {
             context.shadowOffsetY = this.shadowOffset.y;
             context.drawImage(canvas2, 0, 0);
             context.restore();
+        }
+    }
+
+    private wrapLines(context: CanvasRenderingContext2D): Iterable<string> {
+        const lines = this.text.split("\n");
+        if (isFinite(this.wrapWidth)) {
+            return chain(lines)
+                .map(mapFn(line => line.split(/\s+/)))
+                .map(
+                    mapFn(
+                        foldFn(
+                            ([line, ...lines], word) =>
+                                !line
+                                    ? [word]
+                                    : context.measureText(`${line} ${word}`).width < this.wrapWidth
+                                    ? [`${line} ${word}`, ...lines]
+                                    : [word, line, ...lines],
+                            [] as string[]
+                        )
+                    )
+                )
+                .map(concat).value;
+        } else {
+            return lines;
         }
     }
 }
