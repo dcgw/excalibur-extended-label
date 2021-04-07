@@ -193,7 +193,7 @@ export default class Label extends Actor {
     /** Radius of the shadow blur in pixels. */
     public shadowBlurRadius: number;
 
-    /** Overall opacity of the label.*/
+    /** Overall opacity of the label, from 0 to 1. */
     public alpha: number;
 
     /** Do not use.
