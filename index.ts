@@ -83,6 +83,11 @@ export interface LabelOptions {
      * @default 0 */
     readonly outlineWidth?: number;
 
+    /** Overall opacity of the label, from 0 to 1.
+     *
+     * @default 1 */
+    readonly opacity?: number;
+
     /** The color of the shadow. Set to Color.Transparent to hide the shadow.
      *
      * @default Color.Transparent */
@@ -180,6 +185,9 @@ export default class Label extends Actor {
     /** Radius of the shadow blur in pixels. */
     public shadowBlurRadius: number;
 
+    /** Overall opacity of the label. */
+    public opacity: number;
+
     public constructor(options?: LabelOptions) {
         super(options);
         this.text = options?.text ?? "";
@@ -196,6 +204,7 @@ export default class Label extends Actor {
         this.shadowColor = options?.shadowColor ?? Color.Transparent;
         this.shadowOffset = options?.shadowOffset ?? Vector.Zero;
         this.shadowBlurRadius = options?.shadowBlurRadius ?? 0;
+        this.opacity = options?.opacity ?? 1;
     }
 
     public draw(context: CanvasRenderingContext2D, delta: number): void {
@@ -239,6 +248,7 @@ export default class Label extends Actor {
             context.shadowColor = this.shadowColor.toString();
             context.shadowOffsetX = this.shadowOffset.x;
             context.shadowOffsetY = this.shadowOffset.y;
+            context.globalAlpha = this.opacity;
             context.drawImage(canvas2, 0, 0);
             context.restore();
         }
