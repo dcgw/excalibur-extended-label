@@ -239,19 +239,24 @@ export default class Label extends Actor {
         lines.forEach((line, i) => context2.strokeText(line, 0, i * lineHeight));
         lines.forEach((line, i) => context2.fillText(line, 0, i * lineHeight));
 
-        context2.restore();
-
         if (canvas2 != null) {
+            context2.resetTransform();
+            context2.globalAlpha = 0;
+            context2.globalCompositeOperation = "destination-over";
+            context2.shadowBlur = this.shadowBlurRadius;
+            context2.shadowColor = this.shadowColor.toString();
+            context2.shadowOffsetX = this.shadowOffset.x;
+            context2.shadowOffsetY = this.shadowOffset.y;
+            context2.drawImage(canvas2, 0, 0);
+
             context.save();
             context.resetTransform();
-            context.shadowBlur = this.shadowBlurRadius;
-            context.shadowColor = this.shadowColor.toString();
-            context.shadowOffsetX = this.shadowOffset.x;
-            context.shadowOffsetY = this.shadowOffset.y;
             context.globalAlpha = this.opacity;
             context.drawImage(canvas2, 0, 0);
             context.restore();
         }
+
+        context2.restore();
     }
 
     private wrapLines(context: CanvasRenderingContext2D): string[] {
