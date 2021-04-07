@@ -186,7 +186,24 @@ export default class Label extends Actor {
     public shadowBlurRadius: number;
 
     /** Overall opacity of the label. */
-    public opacity: number;
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore Hacky override of field in base class to avoid unwanted interactions with base opacity.
+    // https://github.com/excaliburjs/Excalibur/issues/874#issuecomment-814557137
+    public get opacity(): number {
+        // eslint-disable-next-line no-underscore-dangle
+        return this._opacity;
+    }
+
+    /** Overall opacity of the label. */
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore Hacky override of field in base class to avoid unwanted interactions with base opacity.
+    // https://github.com/excaliburjs/Excalibur/issues/874#issuecomment-814557137
+    public set opacity(opacity: number): void {
+        // eslint-disable-next-line no-underscore-dangle
+        this._opacity = opacity;
+    }
+
+    private _opacity: number;
 
     public constructor(options?: LabelOptions) {
         super(options);
@@ -204,7 +221,8 @@ export default class Label extends Actor {
         this.shadowColor = options?.shadowColor ?? Color.Transparent;
         this.shadowOffset = options?.shadowOffset ?? Vector.Zero;
         this.shadowBlurRadius = options?.shadowBlurRadius ?? 0;
-        this.opacity = options?.opacity ?? 1;
+        // eslint-disable-next-line no-underscore-dangle
+        this._opacity = options?.opacity ?? 1;
     }
 
     public draw(context: CanvasRenderingContext2D, delta: number): void {
