@@ -86,6 +86,14 @@ export interface LabelOptions {
     /** Overall opacity of the label, from 0 to 1.
      *
      * @default 1 */
+    readonly alpha?: number;
+
+    /** Do not use.
+     *
+     * @deprecated This field has an unwanted and confusing interaction with
+     * the underlying Actor class.
+     *
+     * @see https://github.com/excaliburjs/Excalibur/issues/874#issuecomment-814557137 */
     readonly opacity?: number;
 
     /** The color of the shadow. Set to Color.Transparent to hide the shadow.
@@ -185,7 +193,17 @@ export default class Label extends Actor {
     /** Radius of the shadow blur in pixels. */
     public shadowBlurRadius: number;
 
-    /** Overall opacity of the label. */
+    /** Overall opacity of the label.*/
+    public alpha: number;
+
+    /** Do not use.
+     *
+     * @deprecated This field has an unwanted and confusing interaction with
+     * the underlying Actor class.
+     *
+     * @see https://github.com/excaliburjs/Excalibur/issues/874#issuecomment-814557137 */
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore Unused override to mark deprecated
     public opacity: number;
 
     public constructor(options?: LabelOptions) {
@@ -204,7 +222,7 @@ export default class Label extends Actor {
         this.shadowColor = options?.shadowColor ?? Color.Transparent;
         this.shadowOffset = options?.shadowOffset ?? Vector.Zero;
         this.shadowBlurRadius = options?.shadowBlurRadius ?? 0;
-        this.opacity = options?.opacity ?? 1;
+        this.alpha = options?.alpha ?? options?.opacity ?? 1;
     }
 
     public draw(context: CanvasRenderingContext2D, delta: number): void {
@@ -251,7 +269,7 @@ export default class Label extends Actor {
 
             context.save();
             context.resetTransform();
-            context.globalAlpha = this.opacity;
+            context.globalAlpha = this.alpha;
             context.drawImage(canvas2, 0, 0);
             context.restore();
         }
