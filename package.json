@@ -39,7 +39,7 @@
     "prettier": "2.3.0",
     "semantic-release": "17.4.3",
     "ts-node": "9.1.1",
-    "typescript": "4.2.4"
+    "typescript": "4.3.2"
   },
   "peerDependencies": {
     "excalibur": "^0.24.0"
