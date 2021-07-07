@@ -459,10 +459,10 @@
   resolved "https://registry.yarnpkg.com/@softwareventures/chain/-/chain-1.0.0.tgz#07be3b7d0f8713fbdd2159b995bfd24390067860"
   integrity sha512-cfpAxZFi5XoNwGWHmtoRpwUaD4rvLM4cgzKgxkU9zkUSCBgf0ToBzdfY1vUlntljgjXf08NjEi9xc7wkFuf6Pg==
 
-"@softwareventures/eslint-config@3.6.3":
-  version "3.6.3"
-  resolved "https://registry.yarnpkg.com/@softwareventures/eslint-config/-/eslint-config-3.6.3.tgz#47b2f1db4286c7fa7b939e1b52cb2c51ee313e13"
-  integrity sha512-P2HRx/q7fEq2ttpv6CGvVkpq3Kz4+59YtDotmG2qZMjzigF3yR4Fgp5EjnJ7vrqiioKBPimnvp1ux+8WS9HAzw==
+"@softwareventures/eslint-config@4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@softwareventures/eslint-config/-/eslint-config-4.0.0.tgz#92ba2c47f59b4eaa4c871b9ebacf54d7bd05aebb"
+  integrity sha512-zUDK0MGDWxAPE7KAN0lB9mI8iNSHWwIGH0PoQn7kwdvPBG1AHIlQr1N+bVJXCJG5AK5glp+KwiGWyI9EwW+8xA==
   dependencies:
     "@typescript-eslint/eslint-plugin" "^2.31.0 || ^3.0.0 || ^4.0.0 || ^4.21.0"
     "@typescript-eslint/eslint-plugin-tslint" "^2.31.0 || ^3.0.0 || ^4.0.0 || ^4.21.0"
