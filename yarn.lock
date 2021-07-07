@@ -319,10 +319,10 @@
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-0.14.0.tgz#9fb3a3cf3132328151f353de4632e01e52102bea"
   integrity sha512-9NET910DNaIPngYnLLPeg+Ogzqsi9uM4mSboU5y6p8S5DzMTVEsJZrawi+BoDNUVBa2DhJqQYUFvMDfgU062LQ==
 
-"@softwareventures/chain@^0.1.2":
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/@softwareventures/chain/-/chain-0.1.2.tgz#2cba555b5c916643c4956ba55b5c538041f20c27"
-  integrity sha512-4eMBnTKQBLHQi7fbKtqf/i8LH5fsGb4JDTXDWo4o7TnUq+3TSdC2gqSopVxb7zQD/jgQTzyGSVDUcIFtlbjMeQ==
+"@softwareventures/chain@^0.1.2 || ^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@softwareventures/chain/-/chain-1.0.0.tgz#07be3b7d0f8713fbdd2159b995bfd24390067860"
+  integrity sha512-cfpAxZFi5XoNwGWHmtoRpwUaD4rvLM4cgzKgxkU9zkUSCBgf0ToBzdfY1vUlntljgjXf08NjEi9xc7wkFuf6Pg==
 
 "@softwareventures/eslint-config@3.6.3":
   version "3.6.3"
