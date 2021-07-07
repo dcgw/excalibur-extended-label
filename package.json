@@ -22,6 +22,9 @@
     "semantic-release": "semantic-release",
     "test": "ava"
   },
+  "engines": {
+    "node": "^12 || ^14 || >=16"
+  },
   "dependencies": {
     "@softwareventures/chain": "^0.1.2",
     "@softwareventures/iterable": "^1.1.1 || ^1.1.1",
