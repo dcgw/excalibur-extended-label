@@ -31,7 +31,7 @@
     "tslib": "^2.0.0"
   },
   "peerDependencies": {
-    "excalibur": "^0.24.0"
+    "excalibur": "^0.24.0 || ^0.25.0"
   },
   "devDependencies": {
     "@softwareventures/eslint-config": "4.3.4",
@@ -41,7 +41,7 @@
     "ava": "4.0.1",
     "cz-conventional-changelog": "3.3.0",
     "eslint": "8.7.0",
-    "excalibur": "0.24.5",
+    "excalibur": "0.25.2",
     "prettier": "2.5.1",
     "semantic-release": "17.4.7",
     "ts-node": "10.4.0",
