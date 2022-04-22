@@ -40,7 +40,7 @@
     "@softwareventures/tsconfig": "5.1.1",
     "ava": "4.2.0",
     "cz-conventional-changelog": "3.3.0",
-    "eslint": "8.13.0",
+    "eslint": "8.14.0",
     "excalibur": "0.24.5",
     "prettier": "2.6.2",
     "semantic-release": "17.4.7",
