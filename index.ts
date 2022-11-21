@@ -1,4 +1,4 @@
-import {Actor, BaseAlign, Body, Color, FontStyle, TextAlign, Vector} from "excalibur";
+import {Actor, BaseAlign, Color, FontStyle, TextAlign, Vector} from "excalibur";
 import chain from "@softwareventures/chain";
 import {mapFn, foldFn, concat, toArray} from "@softwareventures/iterable";
 
@@ -110,11 +110,6 @@ export interface LabelOptions {
      *
      * @default 0 */
     readonly shadowBlurRadius?: number;
-
-    /** The physics body the is associated with this actor. The body is the
-     * container for all physical properties, like position, velocity,
-     * acceleration, mass, inertia, etc. */
-    readonly body?: Body;
 }
 
 const offscreenCanvas = (() => {
