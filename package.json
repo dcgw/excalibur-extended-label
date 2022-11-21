@@ -28,19 +28,26 @@
   "dependencies": {
     "@softwareventures/chain": "^0.1.2 || ^1.0.0",
     "@softwareventures/iterable": "^1.1.1 || ^1.1.1 || ^2.0.0",
+    "@typescript-eslint/parser": "5.43.0",
     "tslib": "^2.0.0"
   },
   "peerDependencies": {
     "excalibur": "^0.24.0 || ^0.25.0"
   },
   "devDependencies": {
-    "@softwareventures/eslint-config": "5.2.0",
+    "@softwareventures/eslint-config": "6.1.0",
     "@softwareventures/prettier-config": "3.0.0",
     "@softwareventures/semantic-release-config": "2.0.3",
     "@softwareventures/tsconfig": "6.0.0",
+    "@typescript-eslint/eslint-plugin": "5.43.0",
     "ava": "4.3.3",
     "cz-conventional-changelog": "3.3.0",
     "eslint": "8.28.0",
+    "eslint-config-prettier": "8.5.0",
+    "eslint-plugin-import": "2.26.0",
+    "eslint-plugin-jsdoc": "38.1.6",
+    "eslint-plugin-prefer-arrow": "1.2.3",
+    "eslint-plugin-sonarjs": "0.15.0",
     "excalibur": "0.25.3",
     "prettier": "2.7.1",
     "semantic-release": "17.4.7",
