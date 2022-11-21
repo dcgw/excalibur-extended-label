@@ -249,8 +249,8 @@ export default class Label extends Actor {
         const lines = this.wrapLines(context2);
         const lineHeight = this.lineHeight ?? this.fontSize;
 
-        lines.forEach((line, i) => context2.strokeText(line, 0, i * lineHeight));
-        lines.forEach((line, i) => context2.fillText(line, 0, i * lineHeight));
+        lines.forEach((line, i) => void context2.strokeText(line, 0, i * lineHeight));
+        lines.forEach((line, i) => void context2.fillText(line, 0, i * lineHeight));
 
         context2.restore();
 
@@ -271,12 +271,12 @@ export default class Label extends Actor {
         const lines = this.text.split("\n");
         if (isFinite(this.wrapWidth)) {
             return chain(lines)
-                .map(mapFn(line => line.split(/\s+/)))
+                .map(mapFn(line => line.split(/\s+/u)))
                 .map(
                     mapFn(
                         foldFn(
                             ([line, ...lines], word) =>
-                                !line
+                                line == null
                                     ? [word]
                                     : context.measureText(`${line} ${word}`).width < this.wrapWidth
                                     ? [`${line} ${word}`, ...lines]
