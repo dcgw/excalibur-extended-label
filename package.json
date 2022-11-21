@@ -26,7 +26,7 @@
     "node": "^14 || ^16 || ^18 || >=19"
   },
   "dependencies": {
-    "@softwareventures/chain": "^0.1.2 || ^1.0.0",
+    "@softwareventures/chain": "^0.1.2 || ^1.0.0 || ^2.0.0",
     "@softwareventures/iterable": "^1.1.1 || ^1.1.1 || ^2.0.0 || ^3.0.0",
     "@typescript-eslint/parser": "5.43.0",
     "tslib": "^2.0.0"
