@@ -23,7 +23,7 @@
     "test": "ava"
   },
   "engines": {
-    "node": "^12 || ^14 || >=16"
+    "node": "^14 || ^16 || ^18 || >=19"
   },
   "dependencies": {
     "@softwareventures/chain": "^0.1.2 || ^1.0.0",
