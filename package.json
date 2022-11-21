@@ -37,7 +37,7 @@
     "@softwareventures/eslint-config": "4.3.5",
     "@softwareventures/prettier-config": "3.0.0",
     "@softwareventures/semantic-release-config": "2.0.3",
-    "@softwareventures/tsconfig": "5.1.1",
+    "@softwareventures/tsconfig": "6.0.0",
     "ava": "4.3.3",
     "cz-conventional-changelog": "3.3.0",
     "eslint": "8.28.0",
