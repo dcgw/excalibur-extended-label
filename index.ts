@@ -1,6 +1,8 @@
 import {Actor, BaseAlign, Color, FontStyle, TextAlign, Vector} from "excalibur";
+import * as excalibur from "excalibur";
 import chain from "@softwareventures/chain";
 import {mapFn, foldFn, concat, toArray} from "@softwareventures/iterable";
+import {hasProperty} from "unknown";
 
 export interface LabelOptions {
     /**  The text to draw. */
@@ -218,6 +220,17 @@ export default class Label extends Actor {
         this.shadowOffset = options?.shadowOffset ?? Vector.Zero;
         this.shadowBlurRadius = options?.shadowBlurRadius ?? 0;
         this.alpha = options?.alpha ?? options?.opacity ?? 1;
+
+        if (
+            hasProperty(excalibur, "Flags") &&
+            hasProperty(excalibur, "Legacy") &&
+            hasProperty(excalibur.Legacy, "LegacyDrawing") &&
+            !excalibur.Flags.isEnabled(excalibur.Legacy.LegacyDrawing)
+        ) {
+            throw new Error(
+                "excalibur-extended-label requires you to call Flags.useLegacyDrawing() before constructing Excalibur Engine"
+            );
+        }
     }
 
     public override draw(context: CanvasRenderingContext2D, delta: number): void {
