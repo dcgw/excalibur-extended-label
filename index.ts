@@ -225,7 +225,7 @@ export default class Label extends Actor {
         this.alpha = options?.alpha ?? options?.opacity ?? 1;
     }
 
-    public draw(context: CanvasRenderingContext2D, delta: number): void {
+    public override draw(context: CanvasRenderingContext2D, delta: number): void {
         const shadowVisible =
             this.shadowColor.a !== 0 &&
             (this.shadowBlurRadius !== 0 || this.shadowOffset.x !== 0 || this.shadowOffset.y !== 0);
