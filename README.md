@@ -13,5 +13,5 @@ using the new drawing system, consider the following alternatives:
 
 -   Support for text shadows and outlines is now built in to excalibur, see the
     corresponding fields in the `Font` class.
--   For multiline text, use
-    [@dcgw/excalibur-multiline-text](https://github.com/dcgw/excalibur-multiline-text).
+-   Support for multiline text is now built in to excalibur.
+-   No alternative is known for automatically wrapping text.
