@@ -51,7 +51,7 @@
     "eslint-plugin-sonarjs": "0.23.0",
     "excalibur": "0.25.3",
     "prettier": "2.8.8",
-    "semantic-release": "19.0.5",
+    "semantic-release": "22.0.12",
     "ts-node": "10.9.2",
     "typescript": "5.3.3"
   },
