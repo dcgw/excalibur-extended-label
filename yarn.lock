@@ -572,10 +572,10 @@
   resolved "https://registry.yarnpkg.com/@softwareventures/chain/-/chain-2.0.2.tgz#2267be08e338d543d7d08b972422ecdaa0bf18ed"
   integrity sha512-oE9Oo3QlO9YAWQW+chyl/IcLaU1H3vJUDydfO7fKVlKI0nW95amTPlYVjtPeIIuwE4VpWIAzrTzocQTRvqRFAA==
 
-"@softwareventures/eslint-config@7.6.0":
-  version "7.6.0"
-  resolved "https://registry.yarnpkg.com/@softwareventures/eslint-config/-/eslint-config-7.6.0.tgz#0d1745aa24b08839166bebf2d7b2c9183bb162b7"
-  integrity sha512-SNdKl41egGAhaKeEEMREVXe0v92agMtjTibOII95UiKfpPgv7qzcBs8+UGkwA68RmO9SKWSHXamXkNVa1WFtCw==
+"@softwareventures/eslint-config@7.10.0":
+  version "7.10.0"
+  resolved "https://registry.yarnpkg.com/@softwareventures/eslint-config/-/eslint-config-7.10.0.tgz#4229e624ecc8529c3e3b4e5343382289f9a5b730"
+  integrity sha512-EsFIjbXmOyuAENX9VbfuLx20G6gexUTdU4/mJAs6QoAKQjt6htElVtol/fuItJM5q/MDHAtp/nHnUf3dcL3zRA==
   dependencies:
     tslib "^2.3.1"
 
