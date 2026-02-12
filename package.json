@@ -33,7 +33,7 @@
     "unknown": "^0.2.5"
   },
   "peerDependencies": {
-    "excalibur": "^0.24.0 || ^0.25.0"
+    "excalibur": "^0.24.0 || ^0.25.0 || ^0.32.0"
   },
   "devDependencies": {
     "@softwareventures/eslint-config": "7.10.0",
@@ -49,7 +49,7 @@
     "eslint-plugin-jsdoc": "40.3.0",
     "eslint-plugin-prefer-arrow": "1.2.3",
     "eslint-plugin-sonarjs": "0.23.0",
-    "excalibur": "0.25.3",
+    "excalibur": "0.32.0",
     "prettier": "2.8.8",
     "semantic-release": "19.0.5",
     "ts-node": "10.9.2",
